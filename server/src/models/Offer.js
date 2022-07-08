@@ -1,4 +1,4 @@
-
+const { CONTEST_STATUS_PENDING } = require('../constants');
 
 module.exports = (sequelize, DataTypes) => {
   const Offer = sequelize.define('Offers', {
@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-
     },
     contestId: {
       type: DataTypes.INTEGER,
@@ -32,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: 'pending',
+      defaultValue: CONTEST_STATUS_PENDING,
     },
   },
   {
@@ -41,9 +40,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Offer.associate = function (models) {
     Offer.belongsTo(models.User, { foreignKey: 'user_id', sourceKey: 'id' });
-  };
 
-  Offer.associate = function (models) {
     Offer.belongsTo(models.Contest,
       { foreignKey: 'contest_id', sourceKey: 'id' });
   };

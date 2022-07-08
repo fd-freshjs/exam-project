@@ -1,3 +1,4 @@
+const { OFFER_STATUS_PENDING } = require('../constants');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -39,7 +40,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
         allowNull: true,
-        defaultValue: 'pending',
+        defaultValue: OFFER_STATUS_PENDING,
       },
     });
   },

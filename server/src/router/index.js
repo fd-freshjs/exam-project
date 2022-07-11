@@ -1,6 +1,5 @@
 const express = require('express');
 const basicMiddlewares = require('../middlewares/basicMiddlewares');
-const hashPass = require('../middlewares/hashPassMiddle');
 const userController = require('../controllers/userController');
 const contestController = require('../controllers/contestController');
 const checkToken = require('../middlewares/checkToken');
@@ -12,7 +11,6 @@ const router = express.Router();
 router.post(
   '/registration',
   validators.validateRegistrationData,
-  hashPass,
   userController.registration,
 );
 
@@ -101,6 +99,7 @@ router.post(
 router.post(
   '/updateUser',
   checkToken.checkToken,
+  // update user validation
   upload.uploadAvatar,
   userController.updateUser,
 );

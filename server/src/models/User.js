@@ -1,4 +1,5 @@
-const { CUSTOMER, CREATOR } = require('../constants');
+const bcrypt = require('bcrypt');
+const { CUSTOMER, CREATOR, SALT_ROUNDS } = require('../constants');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -62,6 +63,18 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     },
   );
+
+  User.beforeCreate(async (user) => {
+    const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+    user.password = hashedPassword;
+  });
+
+  User.beforeUpdate(async (user) => {
+    if (user.password) {
+      const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+      user.password = hashedPassword;
+    }
+  });
 
   User.associate = function (models) {
     User.hasMany(models.Offer, { foreignKey: 'user_id', targetKey: 'id' });

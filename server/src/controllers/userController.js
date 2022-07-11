@@ -10,6 +10,7 @@ const bankQueries = require('./queries/bankQueries');
 const ratingQueries = require('./queries/ratingQueries');
 const { CONTEST_STATUS_PENDING, CONTEST_STATUS_ACTIVE } = require('../constants');
 const { prepareUser } = require('../utils/user.utils');
+const { createAccessToken } = require('../services/jwtService');
 
 module.exports.login = async (req, res, next) => {
   try {
@@ -17,18 +18,9 @@ module.exports.login = async (req, res, next) => {
 
     await userQueries.passwordCompare(req.body.password, foundUser.password);
 
-    const accessToken = jwt.sign({
-      firstName: foundUser.firstName,
-      userId: foundUser.id,
-      role: foundUser.role,
-      lastName: foundUser.lastName,
-      avatar: foundUser.avatar,
-      displayName: foundUser.displayName,
-      balance: foundUser.balance,
-      email: foundUser.email,
-      rating: foundUser.rating,
-    }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
+    const accessToken = createAccessToken(foundUser);
     await userQueries.updateUser({ accessToken }, foundUser.id);
+
     res.send({ user: prepareUser(foundUser), token: accessToken });
   } catch (err) {
     next(err);
@@ -38,17 +30,7 @@ module.exports.registration = async (req, res, next) => {
   try {
     const newUser = await userQueries.userCreation(req.body);
 
-    const accessToken = jwt.sign({
-      firstName: newUser.firstName,
-      userId: newUser.id,
-      role: newUser.role,
-      lastName: newUser.lastName,
-      avatar: newUser.avatar,
-      displayName: newUser.displayName,
-      balance: newUser.balance,
-      email: newUser.email,
-      rating: newUser.rating,
-    }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
+    const accessToken = createAccessToken(newUser);
     await userQueries.updateUser({ accessToken }, newUser.id);
 
     res.send({ user: prepareUser(newUser), token: accessToken });
@@ -150,16 +132,7 @@ module.exports.updateUser = async (req, res, next) => {
     }
     const updatedUser = await userQueries.updateUser(req.body,
       req.tokenData.userId);
-    res.send({
-      id: updatedUser.id,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      displayName: updatedUser.displayName,
-      avatar: updatedUser.avatar,
-      email: updatedUser.email,
-      balance: updatedUser.balance,
-      role: updatedUser.role,
-    });
+    res.send(prepareUser(updatedUser));
   } catch (err) {
     next(err);
   }

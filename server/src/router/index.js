@@ -6,20 +6,13 @@ const checkToken = require('../middlewares/checkToken');
 const validators = require('../middlewares/validators');
 const chatController = require('../controllers/chatController');
 const upload = require('../utils/fileUpload');
+const authRouter = require('./authRouter');
+
 const router = express.Router();
 
-router.post(
-  '/registration',
-  validators.validateRegistrationData,
-  userController.registration,
-);
+router.use('/auth', authRouter);
 
-router.post(
-  '/login',
-  validators.validateLogin,
-  userController.login,
-);
-
+// contest router
 router.post(
   '/dataForContest',
   checkToken.checkToken,
@@ -56,11 +49,6 @@ router.post(
   contestController.getContests,
 );
 
-router.post(
-  '/getUser',
-  checkToken.checkAuth,
-);
-
 router.get(
   '/downloadFile/:fileName',
   checkToken.checkToken,
@@ -74,6 +62,8 @@ router.post(
   contestController.updateContest,
 );
 
+
+// offer router
 router.post(
   '/setNewOffer',
   checkToken.checkToken,
@@ -96,6 +86,13 @@ router.post(
   userController.changeMark,
 );
 
+
+// user router
+router.post(
+  '/getUser',
+  checkToken.checkAuth,
+);
+
 router.post(
   '/updateUser',
   checkToken.checkToken,
@@ -111,6 +108,8 @@ router.post(
   userController.cashout,
 );
 
+
+// chat router
 router.post(
   '/newMessage',
   checkToken.checkToken,

@@ -14,9 +14,11 @@ module.exports = (err, req, res, next) => {
     err.message = 'Not Enough money';
     err.code = 406;
   }
-  if (!err.message || !err.code) {
+
+  console.log(err.status);
+  if (!err.message || (!err.code && !err.status)) {
     res.status(500).send('Server Error');
   } else {
-    res.status(err.code).send(err.message);
+    res.status(err.code || err.status).send(err.message);
   }
 };

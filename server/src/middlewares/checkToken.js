@@ -1,6 +1,7 @@
 const TokenError = require('../errors/TokenError');
 const userQueries =require('../controllers/queries/userQueries');
-const { verifyAccessToken } = require('../services/jwtService');
+const { verifyAccessToken, verifyRefreshToken } = require('../services/jwtService');
+const createHttpError = require('http-errors');
 
 module.exports.checkAuth = async (req, res, next) => {
   const accessToken = req.headers.authorization;
@@ -26,14 +27,30 @@ module.exports.checkAuth = async (req, res, next) => {
 };
 
 module.exports.checkToken = async (req, res, next) => {
-  const accessToken = req.headers.authorization;
-  if (!accessToken) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
     return next(new TokenError('need token'));
   }
   try {
-    req.tokenData = verifyAccessToken(accessToken);
+    const [, token] = authHeader.split(' ');
+    req.tokenData = verifyAccessToken(token);
     next();
   } catch (err) {
     next(new TokenError());
+  }
+};
+
+module.exports.checkRefreshToken = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      throw new Error('Invalid token');
+    }
+
+    req.tokenData = verifyRefreshToken(refreshToken);
+    next();
+  } catch (error) {
+    next(createHttpError(419, 'Refresh expired'));
   }
 };

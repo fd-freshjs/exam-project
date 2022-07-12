@@ -23,6 +23,7 @@ module.exports.login = async (req, res, next) => {
     next(err);
   }
 };
+
 module.exports.registration = async (req, res, next) => {
   try {
     const newUser = await userQueries.userCreation(req.body);
@@ -31,11 +32,7 @@ module.exports.registration = async (req, res, next) => {
 
     res.send({ user: prepareUser(newUser), tokenPair });
   } catch (err) {
-    if (err.name === 'SequelizeUniqueConstraintError') {
-      next(new NotUniqueEmail());
-    } else {
-      next(err);
-    }
+    next(err);
   }
 };
 

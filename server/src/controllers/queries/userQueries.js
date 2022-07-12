@@ -24,11 +24,11 @@ module.exports.findUser = async (predicate, transaction) => {
 
 module.exports.userCreation = async (data) => {
   const newUser = await bd.Users.create(data);
+
   if (!newUser) {
     throw new ServerError('server error on user creation');
-  } else {
-    return newUser.get({ plain: true });
   }
+  return newUser.get({ plain: true });
 };
 
 const passwordCompare = async (pass, pass_hash) => {

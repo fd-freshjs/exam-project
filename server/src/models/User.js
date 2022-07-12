@@ -90,6 +90,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.beforeCreate(async (user) => {
     const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+    console.log(user.password, hashedPassword);
     user.password = hashedPassword;
   });
 

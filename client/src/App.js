@@ -32,8 +32,7 @@ function App () {
     const refresh = localStorage.getItem(CONSTANTS.REFRESH_TOKEN);
     
     const body = { refreshToken: refresh };
-    
-    console.log('refresh');
+
     dispatch(authActionRefresh(body));
   }, [dispatch]);
 

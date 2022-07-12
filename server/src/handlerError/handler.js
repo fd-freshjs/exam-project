@@ -7,10 +7,10 @@ module.exports = (err, req, res, next) => {
     err.code = 400;
   }
 
-  if (err.message ===
-    'new row for relation "Banks" violates check constraint "Banks_balance_ck"' ||
-    err.message ===
-    'new row for relation "Users" violates check constraint "Users_balance_ck"') {
+  if (
+    err.message.includes('Banks_balance_ck') ||
+    err.message.includes('Users_balance_ck')
+  ) {
     err.message = 'Not Enough money';
     err.code = 406;
   }

@@ -1,19 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
-import styles from './ContestSideBar.module.sass';
+import { getContestTimeDiff } from '../../utils';
 import CONSTANTS from '../../constants';
+import styles from './ContestSideBar.module.sass';
 
 const ContestSideBar = (props) => {
-  const getTimeStr = () => {
-    const diff = (moment.duration(moment().diff(moment(props.contestData.createdAt))));
-    let str = '';
-    if (diff._data.days !== 0) str = `${diff._data.days} days `;
-    if (diff._data.hours !== 0) str += `${diff._data.hours} hours`;
-    if (str.length === 0) str = 'less than one hour';
-    return str;
-  };
+
+  console.log(props.contestData);
+  const getTimeStr = () => getContestTimeDiff(props.contestData.createdAt);
 
   const renderContestInfo = () => {
     const { totalEntries } = props;

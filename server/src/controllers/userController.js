@@ -116,7 +116,7 @@ module.exports.payment = async (req, res, next) => {
         userId: req.tokenData.userId,
         priority: index + 1,
         orderId,
-        createdAt: moment().format('YYYY-MM-DD HH:mm'),
+        createdAt: moment().utc().format('YYYY-MM-DD HH:mm'),
         prize,
       });
     });

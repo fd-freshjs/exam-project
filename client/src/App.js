@@ -30,10 +30,9 @@ function App () {
   
   useLayoutEffect(() => {
     const refresh = localStorage.getItem(CONSTANTS.REFRESH_TOKEN);
-    
-    const body = { refreshToken: refresh };
-
-    dispatch(authActionRefresh(body));
+    if (refresh) {
+      dispatch(authActionRefresh({ refreshToken: refresh }));
+    }
   }, [dispatch]);
 
   return (

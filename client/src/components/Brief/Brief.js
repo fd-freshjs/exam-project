@@ -64,7 +64,7 @@ const Brief = (props) => {
     isEditContest, contestData, changeEditContest, role, goChat, clearUpdateContestStore,
   } = props;
   const { error } = props.updateContestStore;
-  const { id } = props.userStore.data;
+  const { id } = props.userStore.data || {};
   if (!isEditContest) {
     return (
       <ContestInfo

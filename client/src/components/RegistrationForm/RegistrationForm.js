@@ -31,8 +31,8 @@ class RegistrationForm extends React.Component {
     };
 
     render() {
-      const { submitting, auth, authClear } = this.props;
-      const { error } = auth;
+      const { submitting, userStore, authClear } = this.props;
+      const { error } = userStore;
       const formInputClasses = {
         container: styles.inputContainer,
         input: styles.input,
@@ -161,7 +161,7 @@ class RegistrationForm extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
+  userStore: state.userStore,
   initialValues: {
     role: CONSTANTS.CUSTOMER,
   },

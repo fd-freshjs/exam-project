@@ -8,6 +8,9 @@ const initialState = {
 
 function userReducer (state = initialState, action) {
   switch (action.type) {
+    case ACTION.AUTH_ACTION_REGISTER:
+    case ACTION.AUTH_ACTION_LOGIN:
+    case ACTION.AUTH_ACTION_REQUEST:
     case ACTION.GET_USER_REQUEST: {
       return {
         ...state,
@@ -16,6 +19,7 @@ function userReducer (state = initialState, action) {
         data: null,
       };
     }
+    case ACTION.AUTH_ACTION_SUCCESS:
     case ACTION.GET_USER_SUCCESS: {
       return {
         ...state,
@@ -24,6 +28,7 @@ function userReducer (state = initialState, action) {
         data: action.data,
       };
     }
+    case ACTION.AUTH_ACTION_ERROR:
     case ACTION.GET_USER_ERROR: {
       return {
         ...state,
@@ -32,12 +37,9 @@ function userReducer (state = initialState, action) {
         data: null,
       };
     }
+    case ACTION.AUTH_ACTION_CLEAR:
     case ACTION.CLEAR_USER_STORE: {
-      return {
-        ...state,
-        data: null,
-        error: null,
-      };
+      return initialState;
     }
     case ACTION.UPDATE_USER_DATA_SUCCESS: {
       return {
@@ -52,6 +54,7 @@ function userReducer (state = initialState, action) {
         error: action.error,
       };
     }
+    case ACTION.AUTH_ACTION_CLEAR_ERROR:
     case ACTION.CLEAR_USER_ERROR: {
       return {
         ...state,

@@ -1,9 +1,30 @@
+const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
 const { CUSTOMER, CREATOR, SALT_ROUNDS } = require('../constants');
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define(
-    'Users',
+  class User extends Model {
+    static associate(models) {
+      User.hasMany(models.Offer, { foreignKey: 'userId', targetKey: 'id' });
+
+      User.hasMany(models.RefreshToken, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+      });
+
+      User.hasMany(models.Contest, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+      });
+
+      User.hasMany(models.Rating, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+      });
+    }
+  }
+
+  User.init(
     {
       id: {
         allowNull: false,
@@ -60,12 +81,16 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      sequelize,
       timestamps: false,
+      modelName: 'User',
+      tableName: 'Users',
     },
   );
 
   User.beforeCreate(async (user) => {
     const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+    console.log(user.password, hashedPassword);
     user.password = hashedPassword;
   });
 
@@ -75,15 +100,6 @@ module.exports = (sequelize, DataTypes) => {
       user.password = hashedPassword;
     }
   });
-
-  User.associate = function (models) {
-    User.hasMany(models.Offer, { foreignKey: 'userId', targetKey: 'id' });
-
-    User.hasMany(models.RefreshTokens, {
-      foreignKey: 'userId',
-      targetKey: 'id',
-    });
-  };
 
   return User;
 };

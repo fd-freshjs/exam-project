@@ -42,12 +42,12 @@ const createSession = async (user) => {
 
   const refresh = tokenPair.refresh;
 
-  const sessions = await db.RefreshTokens.findAll({ where: { userId: user.id }, order: [['updatedAt', 'ASC']] });
+  const sessions = await db.RefreshToken.findAll({ where: { userId: user.id }, order: [['updatedAt', 'ASC']] });
   if (sessions.length >= MAX_SESSIONS_COUNT) {
     const oldestToken = sessions[0];
-    await db.RefreshTokens.update({ value: refresh }, { where: { id: oldestToken.id } });
+    await db.RefreshToken.update({ value: refresh }, { where: { id: oldestToken.id } });
   } else {
-    await db.RefreshTokens.create({ value: refresh, userId: user.id });
+    await db.RefreshToken.create({ value: refresh, userId: user.id });
   }
 
   return tokenPair;
@@ -55,13 +55,13 @@ const createSession = async (user) => {
 module.exports.createSession = createSession;
 
 module.exports.refreshSession = async (refreshToken, tokenData) => {
-  const foundToken = await db.RefreshTokens.findOne({ where: { value: refreshToken } });
+  const foundToken = await db.RefreshToken.findOne({ where: { value: refreshToken } });
 
   if (!foundToken) {
     throw createHttpError(419, 'Refresh token not found');
   }
 
-  await db.RefreshTokens.destroy({ where: { id: foundToken.id } });
+  await db.RefreshToken.destroy({ where: { id: foundToken.id } });
 
   const user = await findUser({ id: tokenData.userId });
   const tokenPair = await createSession(user);

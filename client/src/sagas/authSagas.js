@@ -8,8 +8,7 @@ export function* loginSaga(action) {
     action.history.replace('/');
 
     const userData = response.data.user;
-    yield put({ type: ACTION.AUTH_ACTION_SUCCESS });
-    yield put({ type: ACTION.GET_USER_SUCCESS, data: userData });
+    yield put({ type: ACTION.AUTH_ACTION_SUCCESS, data: userData });
   } catch (err) {
     yield put({ type: ACTION.AUTH_ACTION_ERROR, error: err.response });
   }
@@ -21,8 +20,7 @@ export function* registerSaga(action) {
     action.history.replace('/');
 
     const userData = response.data.user;
-    yield put({ type: ACTION.AUTH_ACTION_SUCCESS });
-    yield put({ type: ACTION.GET_USER_SUCCESS, data: userData });
+    yield put({ type: ACTION.AUTH_ACTION_SUCCESS, data: userData });
   } catch (e) {
     yield put({ type: ACTION.AUTH_ACTION_ERROR, error: e.response });
   }
@@ -33,8 +31,7 @@ export function* refreshSaga(action) {
     const response = yield restController.refreshRequest(action.data);
 
     const userData = response.data.user;
-    yield put({ type: ACTION.AUTH_ACTION_SUCCESS });
-    yield put({ type: ACTION.GET_USER_SUCCESS, data: userData });
+    yield put({ type: ACTION.AUTH_ACTION_SUCCESS, data: userData });
   } catch (e) {
     yield put({ type: ACTION.AUTH_ACTION_ERROR, error: e.response });
   }

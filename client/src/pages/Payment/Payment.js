@@ -62,7 +62,7 @@ const Payment = (props) => {
             <span>Total:</span>
             <span>$100.00 USD</span>
           </div>
-          <a href="http://www.google.com">Have a promo code?</a>
+          <a target='_blank' rel="noreferrer" href="http://www.google.com">Have a promo code?</a>
         </div>
       </div>
     </div>
